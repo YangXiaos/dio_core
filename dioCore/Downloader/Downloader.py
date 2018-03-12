@@ -17,10 +17,11 @@ def uaDecorator(fuc):
     """
     def __fuc(*args, **kwargs):
         reqKwargs = kwargs.get("reqKwargs")
-        if "headers" not in reqKwargs:
-            reqKwargs.update({"headers": Consts.HEADERS})
-        if "timeout" not in reqKwargs:
-            reqKwargs.update({"timeout": Consts.TIMEOUT})
+        if reqKwargs is not None:
+            if "headers" not in reqKwargs:
+                reqKwargs.update({"headers": Consts.HEADERS})
+            if "timeout" not in reqKwargs:
+                reqKwargs.update({"timeout": Consts.TIMEOUT})
         if "successStateCode" not in kwargs:
             kwargs.update({"successStateCode": Consts.SUCCESS_STATE_CODE})
         if "parser" not in kwargs:
@@ -135,5 +136,8 @@ class Downloader(object):
 
 if __name__ == '__main__':
     session_ = requests.Session()
+    d = Downloader()
+    res = d.getRes("http://blog.jobbole.com/112233/")
+
     res_ = Downloader.getRes("http://blog.csdn.net/u014756517/article/details/51953420")
     print(res_.text)

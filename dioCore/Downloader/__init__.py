@@ -2,3 +2,5 @@
 # @Author       : DioMryang
 # @File         : __init__.py
 # @Description  :
+
+from dioCore.Downloader.Downloader import Downloader

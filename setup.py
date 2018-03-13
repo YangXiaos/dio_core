@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="dioCore",
-    version="0.0.2",
+    version="0.0.3",
     description="dio采集系统核心",
     author="dio_mryang",
     url="https://github.com/YangXiaos/",

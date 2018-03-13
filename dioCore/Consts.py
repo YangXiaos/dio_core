@@ -35,3 +35,7 @@ SUCCESS_STATE_CODE = 200
 
 PARSER = "lxml"
 
+
+# 工具类变量
+standardDateTimeFormat = "%Y%m%d%H%M%S"
+

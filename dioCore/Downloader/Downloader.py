@@ -5,7 +5,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-from dioCore.Downloader import Consts
+from dioCore import Consts
 from dioCore.Downloader.Error import StateCodeException
 
 

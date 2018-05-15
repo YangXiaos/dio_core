@@ -1,7 +1,8 @@
-# @Time         : 18-1-25 下午10:55
+# @Time         : 18-5-15 下午10:40
 # @Author       : DioMryang
 # @File         : Consts.py
 # @Description  :
+
 
 from enum import Enum, unique
 
@@ -34,8 +35,3 @@ REPTY_TIME = 3
 SUCCESS_STATE_CODE = 200
 
 PARSER = "lxml"
-
-
-# 工具类变量
-standardDateTimeFormat = "%Y%m%d%H%M%S"
-

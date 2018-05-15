@@ -29,5 +29,4 @@ def insertData(data, conn=None, dbName=None, collectionName=None, db=None, colle
         db[collectionName].insert(data)
     elif conn and dbName and collectionName:
         conn[dbName][collectionName].insert(data)
-    # todo 设置异常
-    raise Exception()
+    raise ValueError("need args conn or dbName or collectionName or db or collection")

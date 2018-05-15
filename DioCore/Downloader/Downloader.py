@@ -5,8 +5,8 @@
 import requests
 from bs4 import BeautifulSoup
 
-from dioCore import Consts
-from dioCore.Downloader.Error import StateCodeException
+from DioCore import Consts
+from DioCore.Downloader.Error import StateCodeException
 
 
 def uaDecorator(fuc):

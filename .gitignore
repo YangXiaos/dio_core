@@ -3,8 +3,8 @@
 
 dist/
 
-dioCore.egg-info/
+DioCore.egg-info/
 
 build/
 
-dioCore/__pycache__/*
+DioCore/__pycache__/*

@@ -4,7 +4,7 @@
 # @Description  : 时间工具类函数
 from datetime import datetime as dt
 
-from dioCore import Consts
+from DioCore import Consts
 
 
 class DateTimeUnit(object):

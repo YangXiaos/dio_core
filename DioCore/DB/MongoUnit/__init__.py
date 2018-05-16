@@ -29,4 +29,4 @@ def insertData(data, conn=None, dbName=None, collectionName=None, db=None, colle
         db[collectionName].insert(data)
     elif conn and dbName and collectionName:
         conn[dbName][collectionName].insert(data)
-    raise ValueError("need args conn or dbName or collectionName or db or collection")
+    raise ValueError("conn or dbName or collectionName or db or collection cant be None")

@@ -31,7 +31,7 @@ class DateTimeUnit(object):
         return dt.now()
 
     @staticmethod
-    def getCurrentStandardDatetime():
+    def getCurStandardDate():
         """
         获取 当前标准时间 datetime
         :param datetime: {datetime} 当前时间对象
@@ -39,6 +39,18 @@ class DateTimeUnit(object):
         """
         return DateTimeUnit.getStandardDatetime(DateTimeUnit.getCurrentDatetime())
 
+    @staticmethod
+    def getStandardDate(date=None):
+        """
+        get standard datetime String
+        :param date:
+        :return:
+        """
+        if date is None:
+            return DateTimeUnit.getCurStandardDate()
+        elif isinstance(date, dt):
+            return DateTimeUnit.getStandardDatetime(date)
+
 
 if __name__ == '__main__':
-    print(DateTimeUnit.getCurrentStandardDatetime())
+    print(DateTimeUnit.getStandardDate())

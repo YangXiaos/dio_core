@@ -17,5 +17,5 @@ def createConnect(**config):
     :return:
     """
     logger.info("create mysql connect {host}:{port}/{db_name}".format(**config))
-    return sessionmaker(bind=create_engine('mysql+{driver}://{user}:{password}@{host}:{port}/{db_name}'.format(**config)
+    return sessionmaker(bind=create_engine('mysql+{driver}://{user}:{password}@{host}:{port}/{db_name}?charset=utf8'.format(**config)
                                            , encoding='utf-8'))()

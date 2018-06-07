@@ -17,7 +17,7 @@ def toJson(obj):
 def formJson(jsonString):
     """
     json字符串 生成json 对象
-    :param obj:
+    :param jsonString:
     :return:
     """
     return json.loads(jsonString)

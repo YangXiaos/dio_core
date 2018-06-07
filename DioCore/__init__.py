@@ -3,5 +3,5 @@
 # @File         : __init__.py.py
 # @Description  :
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 __author__ = 'dio'

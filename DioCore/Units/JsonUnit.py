@@ -14,7 +14,7 @@ def toJson(obj):
     return json.dumps(obj)
 
 
-def formJson(jsonString):
+def toPython(jsonString):
     """
     json字符串 生成json 对象
     :param jsonString:

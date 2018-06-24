@@ -3,5 +3,5 @@
 # @File         : __init__.py.py
 # @Description  : 工具库
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 __author__ = 'dio'

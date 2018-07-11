@@ -23,6 +23,8 @@ def multiThreadingRun(fuc, argsList=None, threadNum=5):
     :param argsList:
     :return:
     """
+    if argsList is None:
+        argsList = range(threadNum)
     pool = threadpool.ThreadPool(threadNum)
     requests = threadpool.makeRequests(fuc, argsList)
     [pool.putRequest(req) for req in requests]

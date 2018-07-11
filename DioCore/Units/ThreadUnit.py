@@ -4,6 +4,8 @@
 # @Description  :
 import threading
 
+import threadpool
+
 
 def getCurrentThreadName():
     """
@@ -11,3 +13,24 @@ def getCurrentThreadName():
     :return:
     """
     return threading.current_thread().getName()
+
+
+def multiThreadingRun(fuc, argsList=None, threadNum=5):
+    """
+    多线程处理函数
+    :param threadNum:
+    :param fuc:
+    :param argsList:
+    :return:
+    """
+    pool = threadpool.ThreadPool(threadNum)
+    requests = threadpool.makeRequests(fuc, argsList)
+    [pool.putRequest(req) for req in requests]
+    pool.wait()
+
+
+if __name__ == '__main__':
+    def dio(num):
+        print(getCurrentThreadName(), num)
+
+    multiThreadingRun(dio, argsList=range(0, 100), threadNum=4)

@@ -1,7 +1,7 @@
 # @Time         : 18-2-13 下午9:07
 # @Author       : DioMryang
-# @File         : __init__.py.py
+# @File         : Const.py.py
 # @Description  : 工具库
 
-__version__ = '0.2.0'
+__version__ = '0.2.2'
 __author__ = 'dio'

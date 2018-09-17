@@ -2,77 +2,130 @@
 # @Author       : DioMryang
 # @File         : Downloader.py
 # @Description  :
+import traceback
+
+import chardet
 import requests
 from bs4 import BeautifulSoup
+from requests import Response
 
 from DioCore.Downloader import Consts
 from DioCore.Downloader.Error import StateCodeException
 
 
-def uaDecorator(fuc):
+# 超时时间
+TIMEOUT = 30
+
+# 浏览器伪装头
+UA = ("Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 " +
+      "Safari/537.36")
+
+# 请求头
+HEADERS = {
+    "User-Agent": UA
+}
+
+# 失败重试次数
+REPEAT = 3
+
+
+class Setting(object):
     """
-    请求参数 默认装饰器
-    :param fuc:
-    :return:
+    attributes:
+        ua: 浏览器头
+        headers: 请求头
+        timeout: 超时
+        returnFailReq: 返回错误请求
+        repeat: 重复次数
+
+    GlobalAttributes:
+
+
     """
-    def __fuc(*args, **kwargs):
-        reqKwargs = kwargs.get("reqKwargs")
-        if reqKwargs is not None:
-            if "headers" not in reqKwargs:
-                reqKwargs.update({"headers": Consts.HEADERS})
-            if "timeout" not in reqKwargs:
-                reqKwargs.update({"timeout": Consts.TIMEOUT})
-        if "successStateCode" not in kwargs:
-            kwargs.update({"successStateCode": Consts.SUCCESS_STATE_CODE})
-        if "parser" not in kwargs:
-            kwargs.update({"parser": Consts.PARSER})
-        return fuc(*args, **kwargs)
-    return __fuc
+
+    class FIELDS_CONST(object):
+        TIMEOUT = "timeout"
+        HEADERS = "headers"
+        UA = "ua"
+        REPEAT = "repeat"
+        RETURN_FAIL_REQ = "returnFailReq"
+
+        USER_AGENT = "User-Agent"
+
+    def __init__(self, timeout: int=TIMEOUT, headers: dict=HEADERS, returnFailReq: bool=False, repeat: int=REPEAT,
+                 ua: str=UA, htmlParse=False):
+        self.ua = ua
+        self.headers = headers
+        self.repeat = repeat
+        self.timeout = timeout
+        self.returnFailReq = returnFailReq
+        self.htmlParse = htmlParse
+
+        self.session = requests.Session()
+        self.headers.update({self.FIELDS_CONST.USER_AGENT: self.ua})
+
+    def resetSession(self):
+        """重设 session"""
+        self.session = requests.Session()
+
+    def setParams(self, **kwargs):
+        """设置请求参数"""
+        if self.FIELDS_CONST.TIMEOUT in kwargs:
+            self.timeout = kwargs.get(self.FIELDS_CONST.TIMEOUT)
+
+        if self.FIELDS_CONST.HEADERS in kwargs:
+            self.headers = kwargs.get(self.FIELDS_CONST.HEADERS)
+        if self.FIELDS_CONST.UA in kwargs:
+            self.ua = kwargs.get(self.FIELDS_CONST.UA)
+            self.headers.update({self.FIELDS_CONST.USER_AGENT: self.ua})
+        if self.FIELDS_CONST.REPEAT in kwargs:
+            self.repeat = kwargs.get(self.FIELDS_CONST.REPEAT)
+        if self.FIELDS_CONST.RETURN_FAIL_REQ in kwargs:
+            self.returnFailReq = kwargs.get(self.FIELDS_CONST.RETURN_FAIL_REQ)
+
+    def getReqParams(self) -> dict:
+        """ 返回 requests 的请求参数"""
+        return {
+            self.FIELDS_CONST.HEADERS: self.headers,
+            self.FIELDS_CONST.TIMEOUT: self.timeout
+        }
 
 
 class Downloader(object):
+    PARSER = "lxml"
 
-    @staticmethod
-    @uaDecorator
-    def getRes(url, session=None, reqKwargs=None, **kwargs):
+    @classmethod
+    def get(cls, url: str, setting: Setting=None) -> Response:
         """
         通过会话请求链接, 返回响应结果
+        :param setting:
         :param url: 请求 url
-        :param session: 请求会话
-        :param reqKwargs: 请求参数
         :return: 响应结果
         """
-        reqKwargs = {} if reqKwargs is None else reqKwargs
-        res = session.get(url, **reqKwargs) if session is not None else requests.get(url, **reqKwargs)
+        if setting is None:
+            setting = Setting()
 
-        code = kwargs.get("successStateCode")
-        # 状态码错误
-        if Downloader.__checkCode(code, res):
-            raise StateCodeException("状态码异常 {}".format(res.status_code))
+        for i in range(setting.repeat):
+            try:
+                res = requests.get(url, **setting.getReqParams())
+                if setting.returnFailReq or res.status_code != 200:
+                    raise StateCodeException("error code {}".format(res.status_code))
+                if setting.htmlParse:
+                    res.encoding = chardet.detect(res.content)["encoding"]
+                    res.soup = BeautifulSoup(res.text, cls.PARSER)
+                return res
+            except Exception as ignored:
+                print("第{}次 请求失败".format(i+1))
+                traceback.print_exc()
 
-        return res
-
-    @staticmethod
-    def getJson(url, session=None, reqKwargs=None, **kwargs):
-        """
-        请求， 获取json形式的数据
-        :param args: 列表参数
-        :param reqKwargs: 请求参数
-        :return: 请求结果， json形式数据
-        """
-        res = Downloader.getRes(url, session, reqKwargs, **kwargs)
-        return res, res.json()
-
-    @staticmethod
-    def getSoup(url, session=None, reqKwargs=None, **kwargs):
-        """
-        获取解析soup
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        res = Downloader.getRes(url, session, reqKwargs, **kwargs)
-        return res, BeautifulSoup(res.text, kwargs.get("parser"))
+    @classmethod
+    def getWithBs4(cls, url: str, setting: Setting=None) -> Response:
+        if setting is None:
+            setting = Setting()
+            setting.htmlParse = True
+        else:
+            setting.htmlParse = True
+        return cls.get(url, setting=setting)
 
     @staticmethod
     def getFile(url, session=None, reqKwargs=None, **kwargs):
@@ -87,44 +140,8 @@ class Downloader(object):
         res = Downloader.getRes(url, session, reqKwargs, **kwargs)
         return res, res.content, url.split("/")[-1], url.split(".")[-1]
 
-    @staticmethod
-    def __checkCode(successStateCode, res):
-        """
-        校验code 是否正确
-        :param stateCode: 状态码
-        :param res: 响应结果
-        :return:
-        """
-        return successStateCode != 0 and res.status_code != successStateCode
-
-    def __init__(self, timeout=Consts.TIMEOUT, repty=Consts.REPTY_TIME, ua=Consts.UA, headers=Consts.HEADERS,
-                 downloadType=Consts.DownloaderType.Res, successStateCode=Consts.SUCCESS_STATE_CODE, parser=Consts.PARSER):
-        self.session = requests.Session()
-        self.ua = ua
-        self.headers = headers
-        self.timeout = timeout
-        self.headers.update({"User-Agent": ua})
-        self.repty = repty
-        self.downloadType = downloadType
-        self.successStateCode = successStateCode
-        self.parser = parser
-
-        self.reqKwargs = {
-            "timeout": self.timeout,
-            "headers": self.headers,
-        }
-        self.otherKwargs = {
-            "successStateCode": self.successStateCode,
-            "parser": self.parser
-        }
-
-    def get(self, url, downloadType=Consts.DownloaderType.Res):
-        reqFun = getattr(self, downloadType.value)
-        for _ in range(self.repty):
-            try:
-                return reqFun(url, self.session, self.reqKwargs, self.otherKwargs)
-            except Exception as e:
-                print(e)
+    def __init__(self):
+        self.setting = Setting()
 
     def resetSession(self):
         """
@@ -135,9 +152,5 @@ class Downloader(object):
 
 
 if __name__ == '__main__':
-    session_ = requests.Session()
-    d = Downloader()
-    res = d.getRes("http://blog.jobbole.com/112233/")
-
-    res_ = Downloader.getRes("http://blog.csdn.net/u014756517/article/details/51953420")
+    res_ = Downloader.get("http://blog.csdn.net/u014756517/article/details/51953420")
     print(res_.text)

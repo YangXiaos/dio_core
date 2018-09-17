@@ -1,12 +1,14 @@
 # @Time         : 18-7-7 下午6:30
 # @Author       : DioMryang
 # @File         : RedisClient.py
+from typing import Mapping, Iterable, Tuple
+
 from DioCore.DB.RedisUnit import createConnect
 
 
 class Redis(object):
     """
-    Redis 键名封装
+    RedisDao 键名封装
     """
     fnNames = []
 
@@ -40,7 +42,34 @@ class Hash(Redis):
     """
     Hash 类型
     """
-    fnNames = ["hdel", "hexists", "hset", "hgetall", "hkeys", "hlen", "hset", "hget"]
+    fnNames = ["hdel", "hexists", "hset", "hgetall", "hkeys", "hlen", "hset", "hget", "hmset", "hvals"]
+
+    def hdel(self, keyName: str):
+        pass
+
+    def hexists(self, keyName: str) -> bool:
+        pass
+
+    def hset(self, keyName: str, value: str):
+        pass
+
+    def hgetall(self) -> dict:
+        pass
+
+    def hkeys(self) -> Iterable[str]:
+        pass
+
+    def hlen(self) -> int:
+        pass
+
+    def hget(self, keyName: str) -> str:
+        pass
+
+    def hmset(self, mapping: Mapping[str, str]):
+        pass
+
+    def hvals(self) -> Iterable[str]:
+        pass
 
 
 class List(Redis):
@@ -48,14 +77,14 @@ class List(Redis):
     List 类型
     """
     fnNames = ["blpop", "brpop", "brpoplpush", "lindex", "linsert", "llen", "lpop", "lpush", "lpushx", "lrange", "lrem",
-               "lset", "ltrim", "rpop", "rpoplpush", "rpush", "rpushx", "sort"]
+               "lset", "ltrim", "rpop", "rpop", "lpush", "rpush", "rpushx", "sort"]
 
 
 class Set(Redis):
     """
     Set 类型
     """
-    fnNames = ["sadd", "scard", "sdiff", "sdiffstore", "sinter", "sinterstore", "sismember", "smembers", "smove", "spop"
+    fnNames = ["sadd", "scard", "sdiff", "sdiffstore", "sinter", "sinterstore", "sismember", "smembers", "smove", "spop",
                "srandmember", "srem", "sunion", "sunionstore"]
 
 

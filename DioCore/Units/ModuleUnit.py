@@ -3,6 +3,7 @@
 # @File         : ModuleUnit.py
 # @Description  : 模块加载类
 import importlib
+import logging
 
 
 def loadModule(modulePath=""):
@@ -20,7 +21,12 @@ def loadClass(absClassPath=""):
     :param absClassPath: 类
     :return:
     """
+    logging.info("加载 {}".format(absClassPath))
     _ = absClassPath.split(".")
-    modulePath, className = "".join(_[0:-1]), _[-1]
+    modulePath, className = ".".join(_[0:-1]), _[-1]
     m = loadModule(modulePath)
     return getattr(m, className)
+
+
+if __name__ == '__main__':
+    loadModule("DioFramework.Processor.JobProcessor.JobSeedReader")

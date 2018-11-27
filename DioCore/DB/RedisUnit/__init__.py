@@ -8,6 +8,7 @@ import redis
 def createConnect(host='localhost', port=6379, decode_responses=True):
     """
     create redis connection
+    :param decode_responses:
     :param host:
     :param port:
     :return:

@@ -11,5 +11,6 @@ setup(
     description="dio采集系统核心",
     author="dio_mryang",
     url="https://github.com/YangXiaos/",
-    packages=find_packages(), install_requires=['pymongo', 'redis', 'sqlalchemy', 'beautifulsoup4', 'requests']
+    packages=find_packages(), install_requires=['pymongo', 'redis', 'sqlalchemy', 'beautifulsoup4', 'requests',
+                                                'threadpool', 'chardet']
 )

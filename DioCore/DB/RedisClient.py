@@ -1,18 +1,19 @@
 # @Time         : 18-7-7 下午6:30
 # @Author       : DioMryang
 # @File         : RedisClient.py
-from typing import Mapping, Iterable, Tuple
+from redis import Redis
+from typing import Mapping, Iterable
 
 from DioCore.DB.RedisUnit import createConnect
 
 
-class Redis(object):
+class RedisClient(object):
     """
     RedisDao 键名封装
     """
     fnNames = []
 
-    def __init__(self, conn, keyName):
+    def __init__(self, conn: Redis, keyName: str):
         """
         :param conn: redis 连接
         :param conn: keyName 键名
@@ -30,15 +31,18 @@ class Redis(object):
 
             setattr(self, fnName, getFn())
 
+    def __del__(self):
+        self.conn.delete(self.keyName)
 
-class Key(Redis):
+
+class Key(RedisClient):
     """
     key 类型
     """
     fnNames = ["get", "del", "exists", "set", "incr", "decr"]
 
 
-class Hash(Redis):
+class Hash(RedisClient):
     """
     Hash 类型
     """
@@ -72,15 +76,18 @@ class Hash(Redis):
         pass
 
 
-class List(Redis):
+class List(RedisClient):
     """
     List 类型
     """
     fnNames = ["blpop", "brpop", "brpoplpush", "lindex", "linsert", "llen", "lpop", "lpush", "lpushx", "lrange", "lrem",
                "lset", "ltrim", "rpop", "rpop", "lpush", "rpush", "rpushx", "sort"]
 
+    def miao(self):
+        pass
 
-class Set(Redis):
+
+class Set(RedisClient):
     """
     Set 类型
     """

@@ -32,7 +32,7 @@ class RedisClient(object):
             setattr(self, fnName, getFn())
 
     def __del__(self):
-        self.conn.delete(self.keyName)
+        pass
 
 
 class Key(RedisClient):

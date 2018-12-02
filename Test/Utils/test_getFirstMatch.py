@@ -1,5 +1,7 @@
+from DioCore.Network.Downloader import Downloader
 from DioCore.Utils import TextUtil
 
 
 def test_getFirstMatch():
-    print(TextUtil.getFirstMatch("job_id: '3265d372b1182c951HR50t2-ElU~',", "job_id: '(.*?)',"))
+    res = Downloader.getWithBs4("https://www.zhipin.com/job_detail/3265d372b1182c951HR50t2-ElU~.html")
+    print(TextUtil.getFirstMatch(res.text, "job_id: '(.*?)',"))

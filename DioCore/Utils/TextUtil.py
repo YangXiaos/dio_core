@@ -6,5 +6,5 @@ import re
 
 
 def getFirstMatch(text, pattern):
-    match = re.match(pattern, text)
+    match = re.search(pattern, text)
     return match.group(1) if match is not None else None

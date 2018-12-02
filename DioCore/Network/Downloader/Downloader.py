@@ -44,29 +44,28 @@ class Setting(object):
         self.headers = headers
         self.repeat = repeat
         self.timeout = timeout
-        self.returnFailReq = returnFailReq
+        self.returnFailReq = returnFailResponse
         self.htmlParse = htmlParse
 
         self.session = requests.Session()
-        self.headers.update({self.FIELDS_CONST.USER_AGENT: self.ua})
+        self.headers.update({Const.PARAM_USER_AGENT: self.ua})
         self.proxies = proxies
 
     def setParams(self, **kwargs):
         """设置请求参数"""
-        if self.FIELDS_CONST.TIMEOUT in kwargs:
-            self.timeout = kwargs.get(self.FIELDS_CONST.TIMEOUT)
-
-        if self.FIELDS_CONST.HEADERS in kwargs:
-            self.headers = kwargs.get(self.FIELDS_CONST.HEADERS)
-        if self.FIELDS_CONST.UA in kwargs:
-            self.ua = kwargs.get(self.FIELDS_CONST.UA)
-            self.headers.update({self.FIELDS_CONST.USER_AGENT: self.ua})
-        if self.FIELDS_CONST.REPEAT in kwargs:
-            self.repeat = kwargs.get(self.FIELDS_CONST.REPEAT)
-        if self.FIELDS_CONST.RETURN_FAIL_REQ in kwargs:
-            self.returnFailReq = kwargs.get(self.FIELDS_CONST.RETURN_FAIL_REQ)
-        if self.FIELDS_CONST.PROXIES in kwargs:
-            self.proxies = kwargs.get(self.FIELDS_CONST.PROXIES)
+        if Const.PARAM_TIMEOUT in kwargs:
+            self.timeout = kwargs.get(Const.PARAM_TIMEOUT)
+        if Const.PARAM_HEADERS in kwargs:
+            self.headers = kwargs.get(Const.PARAM_HEADERS)
+        if Const.PARAM_USER_AGENT in kwargs:
+            self.ua = kwargs.get(Const.PARAM_USER_AGENT)
+            self.headers.update({Const.PARAM_USER_AGENT: self.ua})
+        if Const.PARAM_REPEAT in kwargs:
+            self.repeat = kwargs.get(Const.PARAM_REPEAT)
+        if Const.DEFAULT_PARAM_RETURN_FAIL_RESPONSE in kwargs:
+            self.returnFailReq = kwargs.get(Const.DEFAULT_PARAM_RETURN_FAIL_RESPONSE)
+        if Const.PARAM_PROXIES in kwargs:
+            self.proxies = kwargs.get(Const.PARAM_PROXIES)
 
     def setProxies(self, ip, port):
         proxyDict = {
@@ -78,11 +77,11 @@ class Setting(object):
     def getReqParams(self) -> dict:
         """ 返回 requests 的请求参数"""
         params = {
-            self.FIELDS_CONST.HEADERS: self.headers,
-            self.FIELDS_CONST.TIMEOUT: self.timeout
+            Const.PARAM_HEADERS: self.headers,
+            Const.PARAM_TIMEOUT: self.timeout
         }
         if self.proxies is not None:
-            params[self.FIELDS_CONST.PROXIES] = self.proxies
+            params[Const.PARAM_PROXIES] = self.proxies
         return params
 
 
@@ -110,6 +109,7 @@ class Downloader(object):
                 if setting.htmlParse:
                     res.encoding = chardet.detect(res.content)["encoding"]
                     res.soup = BeautifulSoup(res.text, cls.PARSER)
+                    res.setting = setting
                 return res
             except Exception as ignored:
                 print("第{}次 请求失败".format(i+1))
@@ -134,7 +134,7 @@ class Downloader(object):
         :param kwargs:
         :return:
         """
-        res = Downloader.getRes(url, session, reqKwargs, **kwargs)
+        res = Downloader.get(url, session, reqKwargs, **kwargs)
         return res, res.content, url.split("/")[-1], url.split(".")[-1]
 
     def __init__(self):

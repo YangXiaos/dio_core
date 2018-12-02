@@ -1,6 +1,6 @@
 # @Time         : 18-5-26 下午8:13
 # @Author       : DioMryang
-# @File         : MysqlUnit.py
+# @File         : MysqlUtil.py
 # @Description  :
 import logging
 

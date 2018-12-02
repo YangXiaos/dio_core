@@ -4,7 +4,7 @@
 from redis import Redis
 from typing import Mapping, Iterable
 
-from DioCore.DB.RedisUnit import createConnect
+from DioCore.DB.RedisUtil import createConnect
 
 
 class RedisClient(object):

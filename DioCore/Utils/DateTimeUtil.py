@@ -1,13 +1,13 @@
 # @Time         : 18-3-13 下午9:35
 # @Author       : DioMryang
-# @File         : DateTimeUnit.py
+# @File         : DateTimeUtil.py
 # @Description  : 时间工具类函数
 from datetime import datetime as dt
 
-from DioCore.Units import Consts
+from DioCore.Utils import Consts
 
 
-class DateTimeUnit(object):
+class DateTimeUtil(object):
     """
     时间工具类函数
 
@@ -37,7 +37,7 @@ class DateTimeUnit(object):
         :param datetime: {datetime} 当前时间对象
         :return: {string} 14位标准字符串
         """
-        return DateTimeUnit.getStandardDatetime(DateTimeUnit.getCurrentDatetime())
+        return DateTimeUtil.getStandardDatetime(DateTimeUtil.getCurrentDatetime())
 
     @staticmethod
     def getStandardDate(date=None):
@@ -47,10 +47,10 @@ class DateTimeUnit(object):
         :return:
         """
         if date is None:
-            return DateTimeUnit.getCurStandardDate()
+            return DateTimeUtil.getCurStandardDate()
         elif isinstance(date, dt):
-            return DateTimeUnit.getStandardDatetime(date)
+            return DateTimeUtil.getStandardDatetime(date)
 
 
 if __name__ == '__main__':
-    print(DateTimeUnit.getStandardDate())
+    print(DateTimeUtil.getStandardDate())

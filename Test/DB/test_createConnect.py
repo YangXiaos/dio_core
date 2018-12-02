@@ -1,4 +1,4 @@
-from DioCore.DB.MysqlUnit import createConnect
+from DioCore.DB.MysqlUtil import createConnect
 
 
 def test_createConnect():

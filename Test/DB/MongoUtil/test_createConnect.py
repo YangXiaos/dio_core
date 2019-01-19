@@ -11,8 +11,6 @@ from DioCore.DB.MongoUtil import createConnect
 class TestCreateConnect(TestCase):
     def test_createConnect(self):
         config = {
-            "host": "localhost",
-            "port": 27017,
 
         }
         conn = createConnect(config)

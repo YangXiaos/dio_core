@@ -3,6 +3,7 @@
 # @File         : JsonUtil.py
 # @Description  :
 import json
+from typing import Union
 
 
 def toJson(obj):
@@ -21,3 +22,21 @@ def toPython(jsonString):
     :return:
     """
     return json.loads(jsonString)
+
+
+def getPythonFromFile(fileName: str) -> Union[dict, list]:
+    """
+    从文件获取 python 对象
+    :param fileName: 文件名
+    :return:
+    """
+    return json.load(open(fileName))
+
+
+def dumpPython2File(pythno: dict, fileName: str):
+    """
+    保存 字符串到文件
+    :param data: 字符串数据
+    :return:
+    """
+    json.dump(pythno, fileName)

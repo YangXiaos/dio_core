@@ -148,6 +148,17 @@ class Downloader(object):
         self.session = requests.Session()
 
 
+class Middleware(object):
+    """"""
+
+    def before(self):
+        pass
+
+    def after(self):
+        pass
+
+
+
 if __name__ == '__main__':
     res_ = Downloader.get(url="http://pdfm2.eastmoney.com/EM_UBG_PDTI_Fast/api/js?id=0001211&TYPE=k&rtntype=5&isCR=false&authorityType=fa")
 

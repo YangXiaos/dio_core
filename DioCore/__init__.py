@@ -3,5 +3,5 @@
 # @File         : Const.py.py
 # @Description  : 工具库
 
-__version__ = '0.2.8'
+__version__ = '0.2.9'
 __author__ = 'dio'

@@ -12,5 +12,5 @@ setup(
     author="dio_mryang",
     url="https://github.com/YangXiaos/",
     packages=find_packages(), install_requires=["pymysql", 'pymongo', 'redis', 'sqlalchemy', 'beautifulsoup4', 'requests',
-                                                'threadpool', 'chardet', 'paramiko', 'lxml']
+                                                'threadpool', 'chardet', 'paramiko', 'lxml', 'Pillow', 'numpy']
 )

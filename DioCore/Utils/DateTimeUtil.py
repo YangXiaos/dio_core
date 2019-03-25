@@ -72,4 +72,4 @@ def pretty(dt: Union[datetime, str]) -> str:
 
 
 if __name__ == '__main__':
-    print(getStandardDate())
+    print(getStandardDate()[4: 12])

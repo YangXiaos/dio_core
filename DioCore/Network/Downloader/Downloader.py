@@ -4,6 +4,7 @@
 # @Description  :
 import logging
 import traceback
+from typing import Union
 
 import chardet
 import requests
@@ -32,6 +33,7 @@ class Setting(object):
         self.session = requests.Session()
 
     def __init__(self,
+                 request: str="GET",
                  timeout: int=Const.DEFAULT_PARAM_TIMEOUT,
                  headers: dict=Const.DEFAULT_HEADERS,
                  returnFailResponse: bool=Const.DEFAULT_PARAM_RETURN_FAIL_RESPONSE,
@@ -40,6 +42,7 @@ class Setting(object):
                  htmlParse=False,
                  proxies=None):
 
+        self.request = request
         self.ua = ua
         self.headers = headers
         self.repeat = repeat
@@ -90,6 +93,32 @@ class Downloader(object):
     logger = logging.getLogger("Downloader")
 
     @classmethod
+    def request(cls, url: str, data: Union[str, dict]=None, setting: Setting=None) -> Response:
+        if setting is None:
+            setting = Setting()
+        cls.logger.info("请求 {}".format(url))
+
+        # 失败重复请求
+        for i in range(setting.repeat):
+            try:
+                # 请求url
+                res = requests.request(setting.request, url, data=data, **setting.getReqParams())
+
+                # 请求code判定
+                if setting.returnFailReq or res.status_code != 200:
+                    raise StateCodeException("error code {}".format(res.status_code))
+
+                # 解析页面
+                if setting.htmlParse:
+                    res.encoding = chardet.detect(res.content)["encoding"]
+                    res.soup = BeautifulSoup(res.text, cls.PARSER)
+                    res.setting = setting
+                return res
+            except Exception as ignored:
+                cls.logger.error("第{}次 请求失败".format(i+1))
+                traceback.print_exc()
+
+    @classmethod
     def get(cls, url: str, setting: Setting=None) -> Response:
         """
         通过会话请求链接, 返回响应结果
@@ -124,6 +153,15 @@ class Downloader(object):
             setting.htmlParse = True
         return cls.get(url, setting=setting)
 
+    @classmethod
+    def getBs4(cls, url: str, setting: Setting=None) -> BeautifulSoup:
+        if setting is None:
+            setting = Setting()
+            setting.htmlParse = True
+        else:
+            setting.htmlParse = True
+        return cls.get(url, setting=setting).soup
+
     @staticmethod
     def getFile(url, session=None, reqKwargs=None, **kwargs):
         """
@@ -136,6 +174,21 @@ class Downloader(object):
         """
         res = Downloader.get(url, session, reqKwargs, **kwargs)
         return res, res.content, url.split("/")[-1], url.split(".")[-1]
+
+    @classmethod
+    def payload(cls, url, data: str="", setting: Setting=None) -> Response:
+        """
+        payload 请求
+        :param url: 请求url
+        :param data: 数据
+        :param setting: 请求配置
+        :return:
+        """
+        if setting is None:
+            setting = Setting()
+            setting.request = "POST"
+
+        return cls.request(url, data, setting=setting)
 
     def __init__(self):
         self.setting = Setting()
@@ -150,7 +203,6 @@ class Downloader(object):
 
 class Middleware(object):
     """"""
-
     def before(self):
         pass
 

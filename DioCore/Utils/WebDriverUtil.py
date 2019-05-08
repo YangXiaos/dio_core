@@ -50,6 +50,55 @@ def get_chrome(executable_path="/opt/driver/chromedriver",
     return driver
 
 
+class ChromeDriverTest(object):
+
+    def __init__(self, executable_path="/opt/driver/chromedriver", host="", port="", proxy_type="http", ua="", **kwargs):
+        chromeOptions = webdriver.ChromeOptions()
+        if host and port:
+            chromeOptions.add_argument('--proxy-server={}://{}:{}'.format(proxy_type, host, port))
+            chromeOptions.add_argument('--proxy-type={}'.format(proxy_type))
+        if ua:
+            chromeOptions.add_argument("--user-agent=\"{}\"".format(ua))
+        driver = webdriver.Chrome(executable_path=executable_path, chrome_options=chromeOptions)
+        self.driver = driver
+
+    def __enter__(self):
+        return self.driver
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.driver.close()
+        self.driver.quit()
+
+class PhantomjsDriverTest(object):
+
+    def __init__(self, executable_path="/opt/driver/chromedriver", host="", port="", proxy_type="http", ua="", **kwargs):
+        if host and port:
+            service_args = [
+                "--proxy={}:{}".format(host, port),
+                "--proxy-type={}".format(proxy_type),
+                '--ignore-ssl-errors=true',
+            ]
+        else:
+            service_args = []
+        dcap = dict(DesiredCapabilities.PHANTOMJS)
+        if not ua:
+            dcap["phantomjs.page.settings.userAgent"] = (
+                "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 6 Build/LYZ28E) AppleWeb"
+                "Kit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.23 Mobile Safari/537.36")
+        else:
+            dcap["phantomjs.page.settings.userAgent"] = ua
+        driver = webdriver.PhantomJS(executable_path="/opt/package/phantomjs-2.1.1-linux-x86_64/bin/phantomjs",
+                                     service_args=service_args, desired_capabilities=dcap)
+        self.driver = driver
+
+    def __enter__(self):
+        pass
+
+    def __exit__(self, *exc):
+        self.driver.close()
+        self.driver.quit()
+
+
 if __name__ == '__main__':
 
     base_kwargs = {
@@ -58,7 +107,7 @@ if __name__ == '__main__':
     company_kwargs = base_kwargs.copy()
 
     # 代理设置
-    company_kwargs.update({"host": "127.0.0.1", "port": "1080", "proxy_type": "socks5", "proxy_platform": "company"})
+    company_kwargs.update({"host": "127.0.0.1", "port": "1080", "proxy_type": "http", "proxy_platform": "company"})
     # company_kwargs.update({"host": "116.31.102.3", "port": "57000", "proxy_type": "http", "proxy_platform": "teg57000"})
     # company_kwargs.update({"host": "116.31.102.3", "port": "57002", "proxy_type": "http", "proxy_platform": "teg57002"})
 
@@ -127,8 +176,28 @@ if __name__ == '__main__':
                "%E4%B9%9D%E4%BA%8C%E5%85%B1%E8%AF%86&num=100&hl=zh-tw")
         word = "九二共识"
 
+    class Info12(Base):
+        url = ("https://www.google.com.hk/search?domains=&sitesearch=&q=%E8%8B%B1%E5%9B%BD%E8%84%B1%E6%AC%A7&tbm=nws&start=0&hl=zh-TW&num=100&lr=lang_zh-TW&tbs=lr:lang_1zh-TW,cdr:1,cd_min:04/24/2019,cd_max:04/26/2019")
+        word = "英国脱欧"
+
+    class Info13(Base):
+        url = ("https://www.google.com.hk/search?domains=&sitesearch=&q=%E8%8B%B1%E5%9B%BD%E8%84%B1%E6%AC%A7&tbm=nws&start=0&hl=zh-TW&num=100&lr=lang_zh-TW&tbs=cdr:1,cd_min:04/24/2019,cd_max:04/26/2019")
+        word = "英国脱欧_无参数"
+
+    class Info14(Base):
+        url = ("https://www.google.com.hk/search?domains=&sitesearch=&q=%E4%B8%80%E5%B8%A6%E4%B8%80%E8%B7%AF&tbm=nws&start=0&hl=zh-TW&num=100&lr=lang_zh-TW&tbs=cdr:1,cd_min:04/24/2019,cd_max:04/25/2019")
+        word = "一带一路"
+
+    class Info15(Base):
+        url = ("https://www.google.com.hk/search?domains=&sitesearch=&q=%E4%B9%A0%E8%BF%91%E5%B9%B3+%E4%BA%94%E5%9B%9B+%E8%AE%B2%E8%AF%9D&tbm=nws&start=0&hl=zh-TW&num=100&lr=lang_zh-TW&tbs=cdr:1,cd_min:05/04/2019,cd_max:05/05/2019")
+        word = "习近平五四讲话"
+
+    class Info16(Base):
+        url = ("https://www.google.com.hk/search?domains=&sitesearch=&q=%E4%B9%A0%E8%BF%91%E5%B9%B3+%E5%BE%B7%E4%BB%81+%E5%A4%A9%E7%9A%87&tbm=nws&start=0&hl=zh-TW&num=100&lr=lang_zh-TW&tbs=cdr:1,cd_min:05/01/2019,cd_max:05/04/2019")
+        word = "习近平德仁天皇"
+
     def main():
-        urls = [Info11]
+        urls = [Info15, Info16]
 
         for info in urls:
             print("-------------{}".format(info.word))

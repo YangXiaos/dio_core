@@ -13,4 +13,4 @@ def getFirstMatch(text, pattern):
 
 def getAllMatch(pattern: str, string: str):
     """获取所有匹配"""
-    return re.search(pattern, string)
+    return re.findall(pattern, string)

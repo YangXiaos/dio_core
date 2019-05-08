@@ -162,6 +162,10 @@ class Downloader(object):
             setting.htmlParse = True
         return cls.get(url, setting=setting).soup
 
+    @classmethod
+    def getJson(cls, url: str, setting: Setting=None) -> dict:
+        return cls.get(url, setting=setting).json()
+
     @staticmethod
     def getFile(url, session=None, reqKwargs=None, **kwargs):
         """

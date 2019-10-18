@@ -13,3 +13,17 @@ def sleep(second):
     :return:
     """
     time.sleep(second)
+
+
+def getUnix():
+    return int(round(time.time() * 1000))
+
+
+def getUnixV2():
+    return int(round(time.time()))
+
+
+currentMilliTime = lambda: int(round(time.time() * 1000))
+
+if __name__ == '__main__':
+    print(getUnixV2())

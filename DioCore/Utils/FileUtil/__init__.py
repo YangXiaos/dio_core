@@ -38,3 +38,15 @@ def saveRows(file_name: str="", data: List=None) -> None:
             f.write(row + "\r\n")
 
 
+def readText(fileName: str=None) -> str:
+    """
+    读取文本
+    :param fileName:
+    :return:
+    """
+    with open(fileName) as file:
+        return file.read()
+
+
+if __name__ == '__main__':
+    readText("/home/changshuai/PycharmProjects/dio_core/Test/Data/temp.txt")

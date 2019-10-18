@@ -72,4 +72,6 @@ def pretty(dt: Union[datetime, str]) -> str:
 
 
 if __name__ == '__main__':
-    print(getStandardDate()[4: 12])
+    start = guess("2019-09-23 21:28:02")
+    end = guess("2019-09-24 10:05:00")
+    print(end - start)

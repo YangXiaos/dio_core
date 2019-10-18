@@ -108,7 +108,7 @@ def buildMainSite(url: str, parentId: int=-1):
     title = soup.select_one("title").text.replace("--", "dio").replace("-", "dio").replace("_", "dio")\
         .replace("——", "dio").replace("|", "dio").replace("·", "dio").replace(" ", "dio")
     name = ""
-    host = UrlUtil.get_host(url)
+    host = UrlUtil.getHost(url)
     print("host 为" + host)
 
     for n in title.split("dio"):
@@ -126,7 +126,7 @@ def buildMainSite(url: str, parentId: int=-1):
     print("输出name为: {}".format(name))
     siteQuery = {
         "name": name,
-        "domain": UrlUtil.get_host(url),
+        "domain": UrlUtil.getHost(url),
         "tags": [],
         "maxDepth": "2",
         "overtime": "",

@@ -12,7 +12,7 @@ def toJson(obj):
     :param obj: 对象
     :return:
     """
-    return json.dumps(obj)
+    return json.dumps(obj,separators=(',', ':'), ensure_ascii=False)
 
 
 def toPython(jsonString):
@@ -33,10 +33,10 @@ def getPythonFromFile(fileName: str) -> Union[dict, list]:
     return json.load(open(fileName))
 
 
-def dumpPython2File(pythno: dict, fileName: str):
+def dumpPython2File(python: dict, fileName: str):
     """
     保存 字符串到文件
     :param data: 字符串数据
     :return:
     """
-    json.dump(pythno, fileName)
+    json.dump(python, open(fileName, "w"))

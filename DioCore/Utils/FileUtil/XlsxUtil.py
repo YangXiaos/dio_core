@@ -2,7 +2,9 @@
 # @Author       : DioMryang
 # @File         : XlsxUtil.py
 # @Description  :
-from typing import List
+import logging
+from collections import OrderedDict
+from typing import List, Dict
 
 import openpyxl
 
@@ -43,6 +45,36 @@ def python2xlsx(rows: List[dict], file_path: str, fields: List):
     wb.save(file_path)
     wb.close()
 
+
+def getDictFromXlsx(file_name: str):
+    """获取"""
+    excel = openpyxl.load_workbook(filename=file_name)
+    fields = []
+    for row in excel.active.iter_rows():
+        if not fields:
+            fields = list(map(lambda field: field.internal_value, row))
+            continue
+        item = list(map(lambda field: field.internal_value, row))
+        if len(item) == len(fields):
+            yield OrderedDict({k: v for k, v in zip(fields, item)})
+        else:
+            logging.error("error item {}".format(item))
+
+
 if __name__ == '__main__':
     # writeRows2Xlsx("xx.xlsx", [[1,2,3], [1,2,3]])
-    print(list(getRowsFromXlsx("/home/changshuai/PycharmProjects/dio_core/DioCore/Utils/FileUtil/xx.xlsx")))
+    rowsCmt = list(getDictFromXlsx("/home/changshuai/Documents/WXWork/1688850552307702/Cache/File/2019-06/【华为】twitter评论-69763条-20190610.xlsx"))
+    rows = list(getDictFromXlsx("/home/changshuai/PycharmProjects/dio_core/DioCore/Utils/teg/华为_twitter_搜索[HUAWEI]_changshuai_20190610.xlsx"))
+
+    mapping = {}
+    for row in rows:
+        twitter_id = row['top_parent_twitter_id']
+        mapping[twitter_id] = row["keyword"]
+
+    for row in rowsCmt:
+        if row["top_parent_twitter_id"] in mapping:
+            row["keyword"] = mapping[row["top_parent_twitter_id"]]
+        else:
+            print(row)
+    print()
+

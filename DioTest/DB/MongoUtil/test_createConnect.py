@@ -10,9 +10,7 @@ from DioCore.DB.MongoUtil import createConnect
 
 class TestCreateConnect(TestCase):
     def test_createConnect(self):
-        config = {
-
-        }
+        config = {}
         conn = createConnect(config)
 
         # 获取数据库
@@ -20,5 +18,5 @@ class TestCreateConnect(TestCase):
 
         # 获取集合
         person = dio.person
-        # person.insert_one({"_id": 1, "name": "杨小帅"})
-        print(person.find_one(dict(_id=1)))
+        person.insert_one({"_id": 1, "name": "杨小帅"})
+        # print(person.find_one(dict(_id=1)))

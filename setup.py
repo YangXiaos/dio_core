@@ -5,6 +5,7 @@
 from setuptools import setup, find_packages
 from DioCore import __version__
 
+
 setup(
     name="DioCore",
     version=__version__,
@@ -13,5 +14,6 @@ setup(
     url="https://github.com/YangXiaos/",
     packages=find_packages(), install_requires=["pymysql", 'pymongo', 'redis', 'sqlalchemy', 'beautifulsoup4', 'requests',
                                                 'threadpool', 'chardet', 'paramiko', 'lxml', 'Pillow', 'numpy',
-                                                'selenium', 'sshtunnel']
+                                                'selenium', 'sshtunnel', 'pyftpdlib', 'openpyxl', 'jsonpath',
+                                                'fontTools']
 )

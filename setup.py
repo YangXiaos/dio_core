@@ -15,5 +15,5 @@ setup(
     packages=find_packages(), install_requires=["pymysql", 'pymongo', 'redis', 'sqlalchemy', 'beautifulsoup4', 'requests',
                                                 'threadpool', 'chardet', 'paramiko', 'lxml', 'Pillow', 'numpy',
                                                 'selenium', 'sshtunnel', 'pyftpdlib', 'openpyxl', 'jsonpath',
-                                                'fontTools']
+                                                'fontTools', 'scikit-image', 'opencv-python']
 )

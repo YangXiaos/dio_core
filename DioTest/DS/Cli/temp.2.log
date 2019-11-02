@@ -1,0 +1,7 @@
+[2019-09-11 16:53:01]-[type]-[INFO]: [POST] 请求 http://rhino.dev.datatub.com/api/login/ajax/tryLogin
+[2019-09-11 16:53:01]-[type]-[INFO]: [POST] 请求 http://rhino.dev.datatub.com/api/supervisor/workerClose
+[2019-09-11 16:53:01]-[/home/changshuai/PycharmProjects/dio_core/DioTest/DS/Cli/DevResetWorkerCli.py]-[INFO]: CLOSE WORKER 结果 {'code': 0}
+[2019-09-11 16:53:11]-[type]-[INFO]: [GET] 请求 http://rhino.dev.datatub.com/api/supervisor/addWorker?num=3&workerGroup=full
+[2019-09-11 16:53:11]-[/home/changshuai/PycharmProjects/dio_core/DioTest/DS/Cli/DevResetWorkerCli.py]-[INFO]: ADD 结果 {'code': 0}
+[2019-09-11 16:54:11]-[type]-[INFO]: [POST] 请求 http://rhino.dev.datatub.com/api/supervisor/clearDeadWorker
+[2019-09-11 16:54:11]-[/home/changshuai/PycharmProjects/dio_core/DioTest/DS/Cli/DevResetWorkerCli.py]-[INFO]: Clear 结果 {'code': 0}

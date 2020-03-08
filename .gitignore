@@ -7,6 +7,6 @@ DioCore.egg-info/
 
 build/
 
-DioCore/__pycache__/*
+dio_core/__pycache__/*
 
 .pytest_cache
